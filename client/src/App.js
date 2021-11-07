@@ -10,11 +10,12 @@ import {
     Statusbar,
     WorkspaceScreen
 } from './components'
+import SignInSide from './components/SignInSide';
 /*
     This is our application's top-level component.
     
     @author McKilla Gorilla 
-    
+
 */
 /*
   This is the entry-point for our application. Notice that we
@@ -31,6 +32,7 @@ const App = () => {
                     <Switch>
                         <Route path="/" exact component={HomeWrapper} />
                         <Route path="/register/" exact component={RegisterScreen} />
+                        <Route path="/login/" exact component={SignInSide} />
                         <Route path="/top5list/:id" exact component={WorkspaceScreen} />
                     </Switch>
                     <Statusbar />
