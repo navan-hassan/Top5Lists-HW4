@@ -291,7 +291,7 @@ input {
   position: relative;
   max-width: 800px;
   max-height: 80vh;
-  background: var(--swatch-complement);
+  background: white;
   overflow: auto;
   cursor: default;
   border-width: 5px;

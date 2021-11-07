@@ -49,6 +49,7 @@ export default function SignInSide() {
       }, store);
     }
     catch(err){
+      console.log(err);
       let modal = document.getElementById("error-modal");
       modal.classList.add('is-visible');
       

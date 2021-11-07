@@ -3,11 +3,15 @@ import Alert from '@mui/material/Alert';
 
 
 
+
+
+
 export default function ErrorModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = (event) => {
-      event.target.classList.remove('is-visible');
+      let modal = document.getElementById("error-modal");
+      modal.classList.remove('is-visible');
   };
 
 
