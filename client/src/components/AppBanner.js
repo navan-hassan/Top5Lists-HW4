@@ -81,7 +81,23 @@ export default function AppBanner() {
     }
     
     function getAccountMenu(loggedIn) {
-        return <AccountCircle />;
+        if(loggedIn){
+            let initials = "";
+            if(auth.user){
+                initials = auth.user.firstName.charAt(0) + auth.user.lastName.charAt(0);
+            }
+            return <Typography                        
+            variant="h4"
+            noWrap
+            component="div"
+            sx={{ display: { xs: 'none', sm: 'block' } }}                        
+        >
+            <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>{initials}</Link>
+            </Typography>
+        }
+        else{
+            return <AccountCircle />;
+        }
     }
 
     return (
