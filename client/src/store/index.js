@@ -362,6 +362,8 @@ function GlobalStoreContextProvider(props) {
         return tps.hasTransactionToRedo();
     }
 
+    
+
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
     store.setIsListNameEditActive = function () {
         storeReducer({

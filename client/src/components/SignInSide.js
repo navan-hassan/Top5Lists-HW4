@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth'
 import { useContext } from 'react';
+import ErrorModal from './ErrorModal';
 
 
 
@@ -41,19 +42,24 @@ export default function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    auth.getLoggedIn({
-      firstName: formData.get('firstName'),
-      lastName: formData.get('lastName'),
+    try{
+    auth.loginUser({
       email: formData.get('email'),
       password: formData.get('password'),
-      passwordVerify: formData.get('passwordVerify')
-  }, store);
+      }, store);
+    }
+    catch(err){
+      let modal = document.getElementById("error-modal");
+      modal.classList.add('is-visible');
+      
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: '30vh' }}>
         <CssBaseline />
+        <ErrorModal />
         <Grid
           item
           xs={false}
