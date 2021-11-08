@@ -11,7 +11,6 @@ import { GlobalStoreContext } from '../store/index.js'
 */
 function WorkspaceScreen() {
     const { store } = useContext(GlobalStoreContext);
-
     let editItems = "";
     if (store.currentList) {
         editItems = 
