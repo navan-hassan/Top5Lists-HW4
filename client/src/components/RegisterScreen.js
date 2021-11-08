@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { GlobalStoreContext } from '../store'
+import ErrorModal from './ErrorModal'
 
 
 export default function RegisterScreen() {
@@ -21,18 +22,26 @@ export default function RegisterScreen() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        auth.registerUser({
-            firstName: formData.get('firstName'),
-            lastName: formData.get('lastName'),
-            email: formData.get('email'),
-            password: formData.get('password'),
-            passwordVerify: formData.get('passwordVerify')
-        }, store);
+        try{
+            auth.registerUser({
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                passwordVerify: formData.get('passwordVerify')
+            }, store);
+        }
+        catch(err){
+            console.log(err);
+            let modal = document.getElementById("error-modal");
+            modal.classList.add('is-visible');    
+        }
     };
 
     return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
+                <ErrorModal />
                 <Box
                     sx={{
                         marginTop: 8,

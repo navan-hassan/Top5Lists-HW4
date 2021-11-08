@@ -97,7 +97,7 @@ function AuthContextProvider(props) {
 
     auth.registerUser = async function(userData, store) {
         const response = await api.registerUser(userData);      
-        if (response.status === 200) {
+        if (response && response.status === 200) {
             authReducer({
                 type: AuthActionType.REGISTER_USER,
                 payload: {
@@ -106,6 +106,11 @@ function AuthContextProvider(props) {
             })
             history.push("/");
             store.loadIdNamePairs();
+        }
+        else{
+            console.log("error!");
+            let modal = document.getElementById("error-modal");
+            modal.classList.add('is-visible');
         }
     }
 

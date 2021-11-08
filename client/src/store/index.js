@@ -233,6 +233,9 @@ function GlobalStoreContextProvider(props) {
         const response = await api.getTop5ListPairs();
         if (response.data.success) {
             let pairsArray = response.data.idNamePairs;
+            pairsArray = pairsArray.filter(pair => {
+                return pair.ownerEmail === auth.user.email;
+            })
             storeReducer({
                 type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                 payload: pairsArray
@@ -362,7 +365,7 @@ function GlobalStoreContextProvider(props) {
         return tps.hasTransactionToRedo();
     }
 
-    
+
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
     store.setIsListNameEditActive = function () {
