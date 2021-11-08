@@ -10,13 +10,16 @@ export const AuthActionType = {
     GET_LOGGED_IN: "GET_LOGGED_IN",
     REGISTER_USER: "REGISTER_USER",
     LOGIN_USER: "LOGIN_USER",
-    LOGOUT_USER: "LOGOUT_USER"
+    LOGOUT_USER: "LOGOUT_USER",
+    SIGN_IN_ERROR: "SIGN_IN_ERROR"
 }
 
 function AuthContextProvider(props) {
     const [auth, setAuth] = useState({
         user: null,
-        loggedIn: false
+        loggedIn: false,
+        error: false,
+        errorMessage: null
     });
     const history = useHistory();
 
@@ -30,30 +33,56 @@ function AuthContextProvider(props) {
             case AuthActionType.GET_LOGGED_IN: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: payload.loggedIn
+                    loggedIn: payload.loggedIn,
+                    error: false,
+                    errorMessage: null
                 });
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    error: false,
+                    errorMessage: null
                 })
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
-                    loggedIn: true
+                    loggedIn: true,
+                    error: false,
+                    errorMessage: null
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
-                    loggedIn: false
+                    loggedIn: false,
+                    error: false,
+                    errorMessage: null
+                })
+            }
+            case AuthActionType.SIGN_IN_ERROR: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    error: payload.error,
+                    errorMessage: payload.errorMessage
                 })
             }
             default:
                 return auth;
         }
+    }
+
+    auth.handleError = function (msg) {
+        authReducer({
+            type:AuthActionType.SIGN_IN_ERROR,
+            payload: {
+                error: !(auth.error),
+                errorMessage: msg 
+            }
+        });
     }
 
     auth.getLoggedIn = async function () {
@@ -90,8 +119,7 @@ function AuthContextProvider(props) {
         }
         else{
             console.log("error!");
-            let modal = document.getElementById("error-modal");
-            modal.classList.add('is-visible');
+            auth.handleError("Invalid Input");
         }
     }
 
@@ -109,8 +137,7 @@ function AuthContextProvider(props) {
         }
         else{
             console.log("error!");
-            let modal = document.getElementById("error-modal");
-            modal.classList.add('is-visible');
+            auth.handleError("Unable to Register");
         }
     }
 

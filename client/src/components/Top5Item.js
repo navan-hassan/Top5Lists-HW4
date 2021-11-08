@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 function Top5Item(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
-    const [text, setText] = useState("");
+    const [text, setText] = useState(props.text);
     const [draggedTo, setDraggedTo] = useState(0);
 
     function handleDragStart(event, targetId) {
@@ -86,7 +86,7 @@ function Top5Item(props) {
                 id={'item-' + (index+1)}
                 key={props.key}
                 className={itemClass}
-                label="Top 5 List Name"
+                label="Item Name"
                 name="name"
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}

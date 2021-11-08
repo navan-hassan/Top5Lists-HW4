@@ -43,6 +43,7 @@ function ListCard(props) {
     async function handleDeleteList(event, id) {
         event.stopPropagation();
         store.markListForDeletion(id);
+        
     }
 
     function handleKeyPress(event) {

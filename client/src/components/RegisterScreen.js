@@ -32,9 +32,7 @@ export default function RegisterScreen() {
             }, store);
         }
         catch(err){
-            console.log(err);
-            let modal = document.getElementById("error-modal");
-            modal.classList.add('is-visible');    
+            console.log(err);   
         }
     };
 
