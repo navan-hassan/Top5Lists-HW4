@@ -16,21 +16,8 @@ import { GlobalStoreContext } from '../store'
 import AuthContext from '../auth'
 import { useContext } from 'react';
 import ErrorModal from './ErrorModal';
+import Copyright from './Copyright';
 
-
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const theme = createTheme();
 
@@ -119,11 +106,6 @@ export default function SignInSide() {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
                   <Link href="/register/" variant="body2">
                     {"Don't have an account? Sign Up"}

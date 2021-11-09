@@ -27,8 +27,9 @@ export default function AppBanner() {
     };
 
     const handleLogout = () => {
-        handleMenuClose();
         auth.logoutUser();
+        handleMenuClose();
+        
     }
 
     const menuId = 'primary-search-account-menu';

@@ -17,12 +17,15 @@ function Top5Item(props) {
     const [text, setText] = useState(props.text);
     const [draggedTo, setDraggedTo] = useState(0);
 
+
     function handleDragStart(event, targetId) {
         event.dataTransfer.setData("item", targetId);
+        store.setIsItemEditActive();
     }
 
     function handleDragOver(event) {
         event.preventDefault();
+        
     }
 
     function handleDragEnter(event) {
@@ -47,6 +50,11 @@ function Top5Item(props) {
 
         // UPDATE THE LIST
         store.addMoveItemTransaction(sourceId, targetId);
+  
+    }
+
+    function handleDragEnd(event){
+        store.setIsItemEditActive();
     }
 
     function handleToggleEdit(event) {
@@ -77,6 +85,7 @@ function Top5Item(props) {
     if (draggedTo) {
         itemClass = "top5-item-dragged-to";
     }
+
 
     if (editActive){
         return (
@@ -120,7 +129,8 @@ function Top5Item(props) {
                     onDrop={(event) => {
                         handleDrop(event, (index+1))
                     }}
-                    draggable="true"
+                    onDragEnd = {handleDragEnd}
+                    draggable={store.isItemEditActive ? false: true}
                     sx={{ display: 'flex', p: 1 }}
                     style={{
                         fontSize: '48pt',
@@ -128,8 +138,8 @@ function Top5Item(props) {
                     }}
                 >
                 <Box sx={{ p: 1 }}>
-                    <IconButton aria-label='edit'>
-                        <EditIcon style={{fontSize:'48pt'}} onClick={handleToggleEdit}  />
+                    <IconButton aria-label='edit' disabled = {store.isItemEditActive}>
+                        <EditIcon style={{fontSize:'48pt'}} onClick={handleToggleEdit} />
                         
                     </IconButton>
                 </Box>

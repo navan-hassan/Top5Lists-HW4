@@ -78,6 +78,18 @@ registerUser = async (req, res) => {
     }
 }
 
+logoutUser = async (req, res) => {
+    try {
+        await res.clearCookie("token").
+        status(200).json({
+            success: true
+        }).send();
+    }
+    catch(err){
+        console.log("Error logging out user.");
+        res.status(500).send();
+    }
+}
 
 loginUser =  async (req, res) =>{
     try{
@@ -103,7 +115,7 @@ loginUser =  async (req, res) =>{
             .status(400)
             .json({
                 success: false,
-                errorMessage: "Invalid password."
+                errorMessage: "Incorrect password."
             })
         }
         const token = auth.signToken(existingUser);
@@ -128,8 +140,12 @@ loginUser =  async (req, res) =>{
     }
 }
 
+
+
+
 module.exports = {
     getLoggedIn,
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 }

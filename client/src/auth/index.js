@@ -86,60 +86,82 @@ function AuthContextProvider(props) {
     }
 
     auth.getLoggedIn = async function () {
-        const response = await api.getLoggedIn();
-        if (response.status === 200) {
-            authReducer({
-                type: AuthActionType.GET_LOGGED_IN,
-                payload: {
-                    loggedIn: response.data.loggedIn,
-                    user: response.data.user
-                }
-            });
+        try{
+            const response = await api.getLoggedIn();
+            if (response.status === 200) {
+                authReducer({
+                    type: AuthActionType.GET_LOGGED_IN,
+                    payload: {
+                        loggedIn: response.data.loggedIn,
+                        user: response.data.user
+                    }
+                });
+            }
+        }
+        catch(err){
+            console.log("message: " + err.response.data.errorMessage);
         }
     }
 
     auth.logoutUser = async function(){
-        authReducer({
-            type: AuthActionType.LOGOUT_USER
-        });
+        try {
+            const response = await api.logoutUser();
+            if (response.status === 200 || response.status === 304){
+                console.log("successfully logging out");
+                authReducer({
+                    type: AuthActionType.LOGOUT_USER
+                });
+                history.push("/");
+            }
+        }
+        catch(err){
+            console.log("error logging out");
+            console.log(err.response.data.errorMessage);
+
+        }
 
     }
 
     auth.loginUser = async function(userData, store){
-        const response = await api.loginUser(userData);
-        if (response && response.status === 200) {
-            authReducer({
-                type: AuthActionType.LOGIN_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
-            store.loadIdNamePairs();
+        try{
+            const response = await api.loginUser(userData);
+            if (response && response.status === 200) {
+                authReducer({
+                    type: AuthActionType.LOGIN_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+                store.loadIdNamePairs();
+            }
         }
-        else{
-            console.log("error!");
-            auth.handleError("Invalid Input");
-        }
+        catch(err){
+            console.log("message: " + err.response.data.errorMessage);
+            auth.handleError(err.response.data.errorMessage);
+        }   
     }
 
     auth.registerUser = async function(userData, store) {
-        const response = await api.registerUser(userData);      
-        if (response && response.status === 200) {
-            authReducer({
-                type: AuthActionType.REGISTER_USER,
-                payload: {
-                    user: response.data.user
-                }
-            })
-            history.push("/");
-            store.loadIdNamePairs();
+        try{
+            const response = await api.registerUser(userData);      
+            if (response && response.status === 200) {
+                authReducer({
+                    type: AuthActionType.REGISTER_USER,
+                    payload: {
+                        user: response.data.user
+                    }
+                })
+                history.push("/");
+                store.loadIdNamePairs();
+            }
         }
-        else{
-            console.log("error!");
-            auth.handleError("Unable to Register");
+        catch(err) {
+            auth.handleError(err.response.data.errorMessage);
         }
     }
+
+      
 
     return (
         <AuthContext.Provider value={{
