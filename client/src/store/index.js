@@ -233,18 +233,21 @@ function GlobalStoreContextProvider(props) {
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = async function () {
-        const response = await api.getTop5ListPairs();
-        if (response.data.success) {
-            let pairsArray = response.data.idNamePairs;
-            pairsArray = pairsArray.filter(pair => {
-                return pair.ownerEmail === auth.user.email;
-            })
-            storeReducer({
-                type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
-                payload: pairsArray
-            });
+        console.log("fetching lists");
+        try{
+            const response = await api.getTop5ListPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                /*pairsArray = pairsArray.filter(pair => {
+                    return pair.ownerEmail === auth.user.email;
+                })*/
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
+                    payload: pairsArray
+                });
+            }
         }
-        else {
+        catch(err){
             console.log("API FAILED TO GET THE LIST PAIRS");
         }
     }
@@ -366,6 +369,7 @@ function GlobalStoreContextProvider(props) {
     store.canRedo = function() {
         return tps.hasTransactionToRedo();
     }
+
 
 
 

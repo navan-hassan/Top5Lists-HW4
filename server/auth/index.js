@@ -13,7 +13,7 @@ function authManager() {
             }
 
             const verified = jwt.verify(token, process.env.JWT_SECRET)
-            req.userId = verified.userId;
+            req.user = verified.user;
 
             next();
         } catch (err) {
@@ -26,7 +26,7 @@ function authManager() {
 
     signToken = function (user) {
         return jwt.sign({
-            userId: user._id
+            user
         }, process.env.JWT_SECRET);
     }
 

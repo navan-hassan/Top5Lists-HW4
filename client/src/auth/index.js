@@ -70,6 +70,14 @@ function AuthContextProvider(props) {
                     errorMessage: payload.errorMessage
                 })
             }
+            case AuthActionType.SET_LOGGED_IN: {
+                return setAuth({
+                    user: payload.user,
+                    loggedIn: payload.loggedIn,
+                    error: false,
+                    errorMessage: null
+                })
+            }
             default:
                 return auth;
         }
@@ -88,18 +96,16 @@ function AuthContextProvider(props) {
     auth.getLoggedIn = async function () {
         try{
             const response = await api.getLoggedIn();
-            if (response.status === 200) {
                 authReducer({
-                    type: AuthActionType.GET_LOGGED_IN,
+                    type: AuthActionType.SET_LOGGED_IN,
                     payload: {
                         loggedIn: response.data.loggedIn,
                         user: response.data.user
                     }
                 });
-            }
         }
         catch(err){
-            console.log("message: " + err.response.data.errorMessage);
+        
         }
     }
 
@@ -160,6 +166,8 @@ function AuthContextProvider(props) {
             auth.handleError(err.response.data.errorMessage);
         }
     }
+
+    
 
       
 

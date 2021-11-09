@@ -1,4 +1,6 @@
+
 const Top5List = require('../models/top5list-model');
+const jwt = require("jsonwebtoken");
 
 createTop5List = (req, res) => {
     const body = req.body;
@@ -14,6 +16,7 @@ createTop5List = (req, res) => {
     if (!top5List) {
         return res.status(400).json({ success: false, error: err })
     }
+
 
     top5List
         .save()
@@ -33,6 +36,8 @@ createTop5List = (req, res) => {
 }
 
 updateTop5List = async (req, res) => {
+    let token = jwt.decode(req.cookies.token);
+    let email = token.user.email;
     const body = req.body
     console.log("updateTop5List: " + JSON.stringify(body));
     if (!body) {
@@ -49,6 +54,9 @@ updateTop5List = async (req, res) => {
                 err,
                 message: 'Top 5 List not found!',
             })
+        }
+        if (top5List.ownerEmail !== email){
+            return res.status(400).json({success: false, error: "List does not belong to user."});
         }
 
         top5List.name = body.name
@@ -74,12 +82,17 @@ updateTop5List = async (req, res) => {
 }
 
 deleteTop5List = async (req, res) => {
+    let token = jwt.decode(req.cookies.token);
+    let email = token.user.email;
     Top5List.findById({ _id: req.params.id }, (err, top5List) => {
         if (err) {
             return res.status(404).json({
                 err,
                 message: 'Top 5 List not found!',
             })
+        }
+        if (top5List.ownerEmail !== email){
+            return res.status(400).json({success: false, error: "List does not belong to user."});
         }
         Top5List.findOneAndDelete({ _id: req.params.id }, () => {
             return res.status(200).json({ success: true, data: top5List })
@@ -109,7 +122,9 @@ getTop5Lists = async (req, res) => {
     }).catch(err => console.log(err))
 }
 getTop5ListPairs = async (req, res) => {
-    await Top5List.find({ }, (err, top5Lists) => {
+    let token = jwt.decode(req.cookies.token);
+    let email = token.user.email;
+    await Top5List.find({ownerEmail: email}, (err, top5Lists) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -123,17 +138,18 @@ getTop5ListPairs = async (req, res) => {
             // PUT ALL THE LISTS INTO ID, NAME PAIRS
             let pairs = [];
             for (let key in top5Lists) {
-                let list = top5Lists[key];
-                let pair = {
-                    _id: list._id,
-                    name: list.name,
-                    ownerEmail: list.ownerEmail
-                };
-                pairs.push(pair);
+                    let list = top5Lists[key];
+                    let pair = {
+                        _id: list._id,
+                        name: list.name,
+                        ownerEmail: list.ownerEmail
+                    }
+                    pairs.push(pair);
             }
             return res.status(200).json({ success: true, idNamePairs: pairs })
-        }
-    }).catch(err => console.log(err))
+            }
+           
+        }).catch(err => console.log(err))
 }
 
 module.exports = {
